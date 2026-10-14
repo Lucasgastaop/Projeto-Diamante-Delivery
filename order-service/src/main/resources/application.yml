@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:h2:mem:orderdb;DB_CLOSE_DELAY=-1;LOCK_TIMEOUT=300000
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:local}
+      base-url: ${OPENAI_BASE_URL:http://localhost:11434/v1}
+      chat:
+        options:
+          model: ${OPENAI_MODEL:llama3.2}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    registry-fetch-interval-seconds: 5
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    non-secure-port: ${server.port}
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
